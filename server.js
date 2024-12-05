@@ -37,22 +37,40 @@ app.use(bodyParser.json());
 app.use('/api', routes);
 // Error handling.
 
-const connectWithRetry = async () => {
+const connectWithRetry = async (maxRetries = 5, delay = 500) => {
+    let retries = 0;
+
+    while (retries < maxRetries) {
         try {
-            const connection = await mongoose.connect(`${process.env.DB_HOST}`);
+            console.log(`Attempting to connect to the DB (Attempt ${retries + 1} of ${maxRetries})...`);
+            const connection = await mongoose.connect(`${process.env.DB_HOST}`, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
             if (connection) {
                 console.log('Connected to DB successfully');
                 return; // Exit the function if connected
             }
         } catch (error) {
-            console.error('Failed to connect to the DB after maximum retries.');
+            retries++;
+            console.error(`Failed to connect to the DB. Retrying in ${delay / 1000} seconds...`, error.message);
+            if (retries >= maxRetries) {
+                console.error('Failed to connect to the DB after maximum retries.');
+                throw new Error('Database connection failed after multiple retries');
+            }
+            await new Promise((resolve) => setTimeout(resolve, delay)); // Wait before retrying
         }
+    }
 };
 
 (async () => {
-    await connectWithRetry();
+    try {
+        await connectWithRetry(); // Adjust maxRetries and delay if needed
+    } catch (error) {
+        console.error('Exiting the application due to DB connection failure:', error.message);
+        process.exit(1); // Exit the process with failure code
+    }
 })();
-
 
 
 app.use((err, req, res, next) => {
