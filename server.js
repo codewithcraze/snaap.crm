@@ -43,10 +43,7 @@ const connectWithRetry = async (maxRetries = 5, delay = 500) => {
     while (retries < maxRetries) {
         try {
             console.log(`Attempting to connect to the DB (Attempt ${retries + 1} of ${maxRetries})...`);
-            const connection = await mongoose.connect(`${process.env.DB_HOST}`, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
+            const connection = await mongoose.connect(`${process.env.DB_HOST}`);
             if (connection) {
                 console.log('Connected to DB successfully');
                 return; // Exit the function if connected

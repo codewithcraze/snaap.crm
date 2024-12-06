@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { trim } = require('validator');
+
 
 const BlogSchema = new mongoose.Schema({
     categoryName: {
@@ -13,7 +13,7 @@ const BlogSchema = new mongoose.Schema({
         trim: true
     },
     description: {
-        type: String,
+        type: String,   
         default: '',
     },
     extraTags: {
