@@ -18,7 +18,8 @@ const authController = {
                 tfnHeader,
                 tfnPopup,
                 title,
-                titleUrl
+                titleUrl,
+                imageURL
             } = req.body;
 
             const newBlog = new Blog({
@@ -34,7 +35,8 @@ const authController = {
                 tfnHeader,
                 tfnPopup,
                 title,
-                titleUrl
+                titleUrl,
+                imageURL
             });
             const savedBlog = await newBlog.save();
             res.status(201).json({
@@ -73,7 +75,8 @@ const authController = {
                 tfnHeader,
                 tfnPopup,
                 title,
-                titleUrl
+                titleUrl,
+                imageURL
             } = req.body;
             const blog = await Blog.findByIdAndUpdate(req.params.id, {
                 categoryName,
@@ -88,7 +91,8 @@ const authController = {
                 tfnHeader,
                 tfnPopup,
                 title,
-                titleUrl
+                titleUrl,
+                imageURL
             }, { new: true });
             res.status(200).json({
                 message: 'Blog updated successfully!',
