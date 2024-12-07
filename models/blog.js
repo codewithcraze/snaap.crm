@@ -71,6 +71,11 @@ const BlogSchema = new mongoose.Schema({
         type: Boolean,
         default: true, // Default status is true (published)
         enum: [true, false] // Ensures status is either true or false
+    },
+    imageURL: {
+        type: String,
+        default: '',
+        trim: true
     }
 }, {
     timestamps: true // Adds createdAt and updatedAt timestamps
